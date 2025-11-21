@@ -3,7 +3,7 @@ serverless:
   login: alexandrevieira
   image: nginx:latest
   replicas: 1
-  containerPort: 8080
+  containerPort: 80
   servicePort: 8080
   nodePort: 50100
   resources:
