@@ -1,0 +1,11 @@
+serverless:
+  name: serverless
+  login: alexandrevieira
+  image: nginx:latest
+  replicas: 1
+  containerPort: 8080
+  servicePort: 8080
+  nodePort: 50100
+  resources:
+    memory: 32Mi
+  

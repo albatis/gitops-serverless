@@ -1,0 +1,10 @@
+apiVersion: v2
+name: modulo
+description: Chart para publicação do módulo
+type: application
+version: 0.0.1
+dependencies:
+  - name: cloud-comp
+    version: 0.0.40
+    repository: https://albatis.github.io/helm-charts/
+    alias: serverless
