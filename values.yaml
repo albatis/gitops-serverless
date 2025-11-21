@@ -1,7 +1,7 @@
 serverless:
   name: serverless
   login: alexandrevieira
-  image: nginx:latest
+  image: lucasmsp/serverless:redis
   replicas: 1
   containerPort: 80
   servicePort: 8080
