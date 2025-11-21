@@ -8,4 +8,7 @@ serverless:
   nodePort: 50100
   resources:
     memory: 32Mi
+  files:
+    hello.py: |-
+      print("Hello, world!")
   
