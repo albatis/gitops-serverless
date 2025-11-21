@@ -7,7 +7,7 @@ serverless:
   servicePort: 8080
   nodePort: 50100
   resources:
-    memory: 32Mi
+    memory: 2Gi
   files:
     hello.py: |-
       print("Hello, world!")
