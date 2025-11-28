@@ -1,5 +1,5 @@
-serverless:
-  name: serverless
+redis:
+  name: redis
   login: alexandrevieira
   image: redis:8.4.0-alpine3.22
   replicas: 1
