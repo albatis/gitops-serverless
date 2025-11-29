@@ -6,6 +6,7 @@ metadata:
   namespace: alexandrevieira
 data:
   REDIS_OUTPUT_KEY: alexandrevieira-proj3-output
+  REDIS_HOST: "192.168.121.171"
 ---
 apiVersion: v1
 kind: ConfigMap
