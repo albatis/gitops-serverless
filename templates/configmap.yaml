@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: outputkey
+  namespace: alexandrevieira
+data:
+  REDIS_OUTPUT_KEY: alexandrevieira-proj3-output
