@@ -6,7 +6,6 @@ metadata:
   namespace: alexandrevieira
 data:
   REDIS_OUTPUT_KEY: alexandrevieira-proj3-output
-  REDIS_HOST: "192.168.121.171"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -52,4 +51,5 @@ data:
             context.env[history_key] = history
             avg_util = sum(history) / len(history)
             output[f'avg-util-cpu{cpu_id}-60sec'] = avg_util
+        print(f"DEBUG - Final Output: {json.dumps(output)}")
         return output
