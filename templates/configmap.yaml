@@ -6,3 +6,49 @@ metadata:
   namespace: alexandrevieira
 data:
   REDIS_OUTPUT_KEY: alexandrevieira-proj3-output
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pyfile
+  namespace: alexandrevieira
+data:
+  pyfile: |
+    import json
+
+    def handler(input: dict, context: object) -> dict:
+        """
+        Funcao serverless para processar metricas de uso de recursos.
+        """
+
+        output = {}
+        bytes_sent = input.get('net_io_counters_eth0-bytes_sent1', 0)
+        bytes_recv = input.get('net_io_counters_eth0-bytes_recv1', 0)
+        total_bytes = bytes_sent + bytes_recv
+        if total_bytes > 0:
+            percent_egress = (bytes_sent / total_bytes) * 100
+        else:
+            percent_egress = 0.0
+        output['percent-network-egress'] = percent_egress
+        mem_buffers = input.get('virtual_memory-buffers', 0)
+        mem_cached = input.get('virtual_memory-cached', 0)
+        mem_total = input.get('virtual_memory-total', 1) # Evita divisao por zero
+        percent_caching = ((mem_buffers + mem_cached) / mem_total) * 100
+        output['percent-memory-caching'] = percent_caching
+        if context.env is None:
+            context.env = {}
+        cpu_keys = [k for k in input.keys() if k.startswith('cpu_percent-')]
+        WINDOW_SIZE = 12
+
+        for cpu_key in cpu_keys:
+            cpu_id = cpu_key.split('-')[1]
+            current_val = input[cpu_key]
+            history_key = f'history_cpu_{cpu_id}'
+            history = context.env.get(history_key, [])
+            history.append(current_val)
+            if len(history) > WINDOW_SIZE:
+                history.pop(0)
+            context.env[history_key] = history
+            avg_util = sum(history) / len(history)
+            output[f'avg-util-cpu{cpu_id}-60sec'] = avg_util
+        return output
