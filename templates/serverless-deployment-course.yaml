@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: serverless-redis
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: serverless-redis
