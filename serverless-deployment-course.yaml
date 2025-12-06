@@ -23,9 +23,11 @@ spec:
             memory: 300Mi
         volumeMounts:
         - name: pyfile
-          mountPath: "/opt/usermodule.py"
+          mountPath: "/opt/serverless-function.py"
           subPath: pyfile
         env:
+        - name: HANDLER_ENTRYPOINT
+          value: "serverless-function.handler"
         - name: REDIS_MONITOR_PERIOD
           value: "20"
         - name: REDIS_HOST
