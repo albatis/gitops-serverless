@@ -22,14 +22,16 @@ spec:
             cpu: 100m
             memory: 300Mi
         volumeMounts:
-        - name: pyfile
-          mountPath: "/opt/serverless-function.py"
-          subPath: pyfile
+        - name: zip-volume
+          mountPath: "/opt/function_code/metrics_function.zip"
+          subPath: metrics_function.zip
         env:
+        - name: CODE_ZIP_PATH
+          value: "/opt/function_code/metrics_function.zip"
         - name: HANDLER_ENTRYPOINT
-          value: "serverless-function.handler"
+          value: "metrics_processor.handler.complex_handler"
         - name: REDIS_MONITOR_PERIOD
-          value: "20"
+          value: "5"
         - name: REDIS_HOST
           value: "192.168.121.171"
         - name: REDIS_PORT
@@ -42,6 +44,9 @@ spec:
               name: outputkey
               key: REDIS_OUTPUT_KEY
       volumes:
-      - name: pyfile
+      - name: zip-volume
         configMap:
-          name: pyfile
+          name: metrics-function-zip
+          items:
+          - key: function_zip_content
+            path: metrics_function.zip

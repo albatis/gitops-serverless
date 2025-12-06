@@ -10,46 +10,8 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pyfile
+  name: metrics-function-zip
   namespace: alexandrevieira
-data:
-  pyfile: |
-    import json
-
-    def handler(input: dict, context: object) -> dict:
-        """
-        Funcao serverless para processar metricas de uso de recursos.
-        """
-
-        output = {}
-        bytes_sent = input.get('net_io_counters_eth0-bytes_sent1', 0)
-        bytes_recv = input.get('net_io_counters_eth0-bytes_recv1', 0)
-        total_bytes = bytes_sent + bytes_recv
-        if total_bytes > 0:
-            percent_egress = (bytes_sent / total_bytes) * 100
-        else:
-            percent_egress = 0.0
-        output['percent-network-egress'] = percent_egress
-        mem_buffers = input.get('virtual_memory-buffers', 0)
-        mem_cached = input.get('virtual_memory-cached', 0)
-        mem_total = input.get('virtual_memory-total', 1) # Evita divisao por zero
-        percent_caching = ((mem_buffers + mem_cached) / mem_total) * 100
-        output['percent-memory-caching'] = percent_caching
-        if context.env is None:
-            context.env = {}
-        cpu_keys = [k for k in input.keys() if k.startswith('cpu_percent-')]
-        WINDOW_SIZE = 12
-
-        for cpu_key in cpu_keys:
-            cpu_id = cpu_key.split('-')[1]
-            current_val = input[cpu_key]
-            history_key = f'history_cpu_{cpu_id}'
-            history = context.env.get(history_key, [])
-            history.append(current_val)
-            if len(history) > WINDOW_SIZE:
-                history.pop(0)
-            context.env[history_key] = history
-            avg_util = sum(history) / len(history)
-            output[f'avg-util-cpu{cpu_id}-60sec'] = avg_util
-        print(f"DEBUG - Final Output: {json.dumps(output)}")
-        return output
+binaryData:
+  # Zip da função complexa codificada em base64.
+  metrics_function.zip: "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"
