@@ -48,5 +48,5 @@ spec:
         configMap:
           name: metrics-function-zip
           items:
-          - key: function_zip_content
+          - key: metrics_function.zip
             path: metrics_function.zip
